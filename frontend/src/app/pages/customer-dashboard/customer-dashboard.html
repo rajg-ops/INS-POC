@@ -1,0 +1,26 @@
+<div class="header">
+  <h2>Customer Dashboard</h2>
+  <button (click)="logout()">Logout</button>
+</div>
+
+<div class="container">
+
+  <p *ngIf="loading">Loading plans...</p>
+
+  <p *ngIf="message" class="message">{{ message }}</p>
+
+  <div *ngIf="plans.length === 0 && !loading">
+    No plans available.
+  </div>
+
+  <div class="plans">
+    <div class="card" *ngFor="let plan of plans">
+      <h3>{{ plan.name }}</h3>
+      <p><strong>Premium:</strong> ₹{{ plan.premium }}</p>
+      <p><strong>Coverage:</strong> ₹{{ plan.coverage }}</p>
+      <p><strong>Duration:</strong> {{ plan.durationMonths }} months</p>
+      <button (click)="subscribe(plan._id)">Subscribe</button>
+    </div>
+  </div>
+
+</div>

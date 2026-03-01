@@ -1,0 +1,25 @@
+# Node
+node_modules/
+npm-debug.log
+
+# Angular
+frontend/.angular/
+frontend/dist/
+frontend/node_modules/
+
+# Backend
+backend/node_modules/
+
+# Env files
+.env
+backend/.env
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+mongo-data/
