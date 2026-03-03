@@ -5,11 +5,13 @@
 
 <div class="container">
 
-  <p *ngIf="loading">Loading plans...</p>
+  <!-- Loading -->
+ <div *ngIf="loading" class="text-center mt-4">
+  Loading plans...
+</div>
 
-  <p *ngIf="message" class="message">{{ message }}</p>
-
-  <div *ngIf="plans.length === 0 && !loading">
+<div *ngIf="!loading">
+  <div *ngIf="plans.length === 0">
     No plans available.
   </div>
 
@@ -19,8 +21,14 @@
       <p><strong>Premium:</strong> ₹{{ plan.premium }}</p>
       <p><strong>Coverage:</strong> ₹{{ plan.coverage }}</p>
       <p><strong>Duration:</strong> {{ plan.durationMonths }} months</p>
-      <button (click)="subscribe(plan._id)">Subscribe</button>
+
+      <button
+        (click)="subscribe(plan._id)"
+        [disabled]="currentUser?.subscribedPlan">
+        Subscribe
+      </button>
     </div>
   </div>
+</div>
 
 </div>

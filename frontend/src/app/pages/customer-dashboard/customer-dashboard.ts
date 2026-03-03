@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 export class CustomerDashboardComponent implements OnInit {
 
   plans: any[] = [];
+  currentUser: any = null;
   loading = true;
   message = '';
 
@@ -27,19 +28,16 @@ export class CustomerDashboardComponent implements OnInit {
 
   ngOnInit() {
     this.loadPlans();
+    this.loadProfile();
   }
 
- loadPlans() {
-  console.log("Calling getPlans()...");
+  loadPlans() {
+  this.loading = true; // always reset before call
 
   this.planService.getPlans().subscribe({
     next: (data: any[]) => {
-      console.log("Plans received:", data);
-
       this.plans = data || [];
       this.loading = false;
-
-      console.log("Loading set to:", this.loading);
     },
     error: (err) => {
       console.error("Error loading plans:", err);
@@ -48,13 +46,38 @@ export class CustomerDashboardComponent implements OnInit {
   });
 }
 
+ loadProfile() {
+  this.authService.getProfile().subscribe({
+    next: (data) => {
+      if (!data) return;
+      this.currentUser = data;
+    },
+    error: () => {
+      this.router.navigate(['/login']);
+    }
+  });
+}
+
   subscribe(planId: string) {
     this.subscriptionService.subscribe(planId).subscribe({
       next: () => {
         this.message = "Subscribed successfully!";
+        this.loadProfile();   // Refresh profile after subscription
       },
       error: (err) => {
         this.message = err.error?.msg || "Subscription failed";
+      }
+    });
+  }
+
+  renew() {
+    this.subscriptionService.renew().subscribe({
+      next: () => {
+        this.message = "Policy renewed successfully!";
+        this.loadProfile();   // Refresh profile after renewal
+      },
+      error: (err) => {
+        this.message = err.error?.msg || "Renewal failed";
       }
     });
   }
